@@ -1,0 +1,19 @@
+18 @@
++<?php
++$up_id='';
++$message_id='';
++function GetUpdateId(){
++	$obj=json_decode(file_get_contents("https://api.telegram.org/bot56923213:AAFcPd-QK4jdR5Ye8YdbV_VkHHkKgJR7xoU/getUpdates"));
++	$fin=end($obj->result);
++	$GLOBALS['up_id']=$fin->update_id;
++}
++
++for(;;){
++	GetUpdateId();
++	$fin=json_decode(file_get_contents("https://api.telegram.org/bot56923213:AAFcPd-QK4jdR5Ye8YdbV_VkHHkKgJR7xoU/getUpdates?offset=".$up_id));
++	if((($fin->result[0]->message->text)=="سلام") && ($message_id != $fin->result[0]->message->message_id)){
++		$rep=json_decode(file_get_contents("https://api.telegram.org/bot56923213:AAFcPd-QK4jdR5Ye8YdbV_VkHHkKgJR7xoU/sendMessage?chat_id=".$fin->result[0]->message->chat->id."&text=".urldecode("سلام. خوبی !؟")));
++		$GLOBALS['message_id']=$fin->result[0]->message->message_id;
++	}
++}
++?>
